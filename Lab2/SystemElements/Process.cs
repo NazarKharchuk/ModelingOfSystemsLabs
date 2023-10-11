@@ -1,12 +1,35 @@
-﻿namespace Lab2.SystemElements
+﻿using System.Collections.Generic;
+
+namespace Lab2.SystemElements
 {
     internal class Process : Element
     {
-        public int queue { get; set; }
+        private int _queue;
+        public int queue
+        {
+            get
+            {
+                if (queueIn is not null)
+                {
+                    return queueIn.queue;
+                }
+                return _queue;
+            }
+            set
+            {
+                if (queueIn is not null)
+                {
+                    queueIn._queue = value;
+                }
+                _queue = value;
+            }
+        }
         public int maxqueue { get; set; }
         public int failure { get; private set; }
         public double meanQueue { get; private set; }
         public double meanLoad { get; private set; }
+        public Process? queueIn { get; set; } = null;
+        public List<Process> commonQueueWith { get; set; } = new List<Process>();
 
         public Process(double delay) : base(delay)
         {
@@ -25,6 +48,14 @@
             }
             else
             {
+                foreach (var process in commonQueueWith)
+                {
+                    if (process.state == 0)
+                    {
+                        process.InAct();
+                        return;
+                    }
+                }
                 if (queue < maxqueue)
                 {
                     queue++;
