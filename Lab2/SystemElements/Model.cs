@@ -70,6 +70,13 @@
 
         public void PrintResult()
         {
+            double meanQueue = 0.0;
+            double meanLoad = 0.0;
+            double failureProbability = 0.0;
+            int processCount = 0;
+            int created = 0;
+            int processed = 0;
+
             Console.WriteLine("\n-------------RESULTS-------------");
             foreach (var element in list)
             {
@@ -79,12 +86,32 @@
                     Process p = (Process)element;
                     Console.WriteLine("mean length of queue = " +
                         p.meanQueue / tcurr +
+                        "\nmean load of process = " +
+                        p.meanLoad / tcurr +
                         "\nfailure probability = " +
-                        p.failure / (double)p.quantity +
-                        "length of queue = " +
-                        p.queue);
+                        p.failure / (double)p.quantity);
+
+                    processCount++;
+                    processed = p.quantity;
+                    meanQueue += p.meanQueue;
+                    meanLoad += p.meanLoad;
+                    failureProbability += p.failure;
+                }
+                if (element is Create)
+                {
+                    created += element.quantity;
                 }
             }
+
+            Console.WriteLine("\n---TOTAL---");
+            Console.WriteLine("mean length of queue = " +
+                (meanQueue / tcurr) / processCount +
+                "\nmean load = " +
+                (meanLoad / tcurr) / processCount +
+                "\nfailure probability = " +
+                failureProbability / (double)processed);
+            Console.WriteLine("start-end probability = " +
+                (double)processed / (double)created);
         }
     }
 }

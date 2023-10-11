@@ -31,7 +31,7 @@ namespace Lab2.SystemElements
 
         public Element(double delay)
         {
-            tnext = 0.0;
+            tnext = double.MaxValue;
             delayMean = delay;
             distribution = "exp";
             tcurr = tnext;
@@ -45,7 +45,7 @@ namespace Lab2.SystemElements
         public Element(string nameOfElement, double delay)
         {
             name = nameOfElement;
-            tnext = 0.0;
+            tnext = double.MaxValue;
             delayMean = delay;
             distribution = "exp";
             tcurr = tnext;
