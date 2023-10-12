@@ -1,4 +1,6 @@
 ﻿using Lab2.Generator;
+using System.Threading.Channels;
+using System.Xml.Linq;
 
 namespace Lab2.SystemElements
 {
@@ -11,7 +13,19 @@ namespace Lab2.SystemElements
         public int quantity { get; set; }
         public double tcurr { get; set; }
         public int state { get; set; }
-        public Element? nextElement { get; set; }
+        public List<(Element, double)> allNextElements { get; set; } = new List<(Element, double)>();
+        public Element? nextElement {
+            get
+            {
+                return GetRandomElement();
+            }
+            set
+            {
+                allNextElements.Clear();
+                allNextElements.Add(item: (value, 1));
+            }
+        }
+
         public static int nextId { get; private set; } = 0;
         public int id { get; set; }
         public string name { get; set; }
@@ -27,6 +41,7 @@ namespace Lab2.SystemElements
             id = nextId;
             nextId++;
             name = "element" + id;
+            allNextElements.Clear();
         }
 
         public Element(double delay)
@@ -40,6 +55,7 @@ namespace Lab2.SystemElements
             id = nextId;
             nextId++;
             name = "element" + id;
+            allNextElements.Clear();
         }
 
         public Element(string nameOfElement, double delay)
@@ -53,6 +69,7 @@ namespace Lab2.SystemElements
             nextElement = null;
             id = nextId;
             nextId++;
+            allNextElements.Clear();
         }
 
         public double GetDelay()
@@ -87,6 +104,31 @@ namespace Lab2.SystemElements
 
         public virtual void DoStatistics(double delta)
         {
+        }
+
+        private Element? GetRandomElement()
+        {
+            if (allNextElements.Count == 0)
+            {
+                return null;
+            }
+
+            double totalProbability = allNextElements.Sum(x => x.Item2);
+            double randomValue = new Random().NextDouble() * totalProbability;
+            //Console.WriteLine($"\trandom {randomValue}");
+
+            double currentSum = 0;
+            foreach (var (element, probability) in allNextElements)
+            {
+                currentSum += probability;
+                if (randomValue <= currentSum)
+                {
+                    //Console.WriteLine($"\tchoosen {element?.name}");
+                    return element;
+                }
+            }
+
+            return allNextElements.Last().Item1;
         }
     }
 }

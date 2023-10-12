@@ -8,24 +8,37 @@ namespace Lab2
         {
             Create c = new Create(1.0);
             Process p1 = new Process(1.0);
-            Process p2 = new Process(2.5);
+            Process p2 = new Process(1.25);
             Process p3 = new Process(1.5);
 
             c.nextElement = p1;
-            p1.nextElement = p2;
 
-            //1-3
-            //p2.nextElement = p3;
+            switch (5)
+            {
+                case 5:
+                    {
+                        p1.createCommonQueueWith(p2);
 
-            //5
-            p2.commonQueueWith.Add(p3);
-            p3.queueIn = p2;
-
-            //6
-
+                        p1.nextElement = p3;
+                        p2.nextElement = p3;
+                        break;
+                    }
+                case 6:
+                    {
+                        p1.allNextElements = new List<(Element, double)> { (p2, 0.4), (p3, 0.6) };
+                        break;
+                    }
+                default:
+                    {
+                        p1.nextElement = p2;
+                        p2.nextElement = p3;
+                        break;
+                    }
+            }
 
             p1.maxqueue = 5;
             p2.maxqueue = 5;
+            p3.maxqueue = 5;
 
             c.name = "CREATOR";
             p1.name = "PROCESSOR1";

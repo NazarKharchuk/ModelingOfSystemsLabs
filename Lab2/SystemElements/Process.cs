@@ -92,5 +92,11 @@ namespace Lab2.SystemElements
             meanQueue += queue * delta;
             meanLoad += state * delta;
         }
+
+        public void createCommonQueueWith(Process process)
+        {
+            commonQueueWith.Add(process);
+            process.queueIn = this;
+        }
     }
 }
