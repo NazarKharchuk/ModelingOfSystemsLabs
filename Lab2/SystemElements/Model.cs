@@ -41,7 +41,7 @@
 
                 foreach (var element in list)
                 {
-                    element.tcurr = tcurr;
+                    element.SetTcurr(tcurr);
                 }
 
                 list[event_].OutAct();
@@ -103,7 +103,7 @@
                 }
             }
 
-            Console.WriteLine("\n---TOTAL---");
+            Console.WriteLine("\n---TOTAL RESULTS---");
             Console.WriteLine("mean length of queue = " +
                 (meanQueue / tcurr) / processCount +
                 "\nmean load = " +

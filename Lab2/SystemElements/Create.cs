@@ -2,7 +2,7 @@
 {
     internal class Create : Element
     {
-        public Create(double delay) : base(delay)
+        public Create(string nameOfElement, double delay) : base(nameOfElement, delay)
         {
             tnext = 0.0;
         }

@@ -6,55 +6,21 @@ namespace Lab2
     {
         static void Main(string[] args)
         {
-            Create c = new Create(1.0);
-            Process p1 = new Process(1.0);
-            Process p2 = new Process(1.25);
-            Process p3 = new Process(1.5);
+            Create c = new Create("CREATOR", 1.0);
+            Process p1 = new Process("PROCESSOR 1", 1.0, 5, new List<Device> { new Device("DEVICE 1.1", 1.0), new Device("DEVICE 1.2", 1.0) });
+            Process p2 = new Process("PROCESSOR 2", 1.25, 5, new List<Device> { new Device("DEVICE 2.1", 1.0) });
+
+            //c.allNextElements = new List<(Element, double)> { (p1, 0.8), (p2, 0.2) };
 
             c.nextElement = p1;
+            p1.nextElement = p2;
 
-            switch (5)
+            List<Element> list = new()
             {
-                case 5:
-                    {
-                        p1.createCommonQueueWith(p2);
-
-                        p1.nextElement = p3;
-                        p2.nextElement = p3;
-                        break;
-                    }
-                case 6:
-                    {
-                        p1.allNextElements = new List<(Element, double)> { (p2, 0.4), (p3, 0.6) };
-                        break;
-                    }
-                default:
-                    {
-                        p1.nextElement = p2;
-                        p2.nextElement = p3;
-                        break;
-                    }
-            }
-
-            p1.maxqueue = 5;
-            p2.maxqueue = 5;
-            p3.maxqueue = 5;
-
-            c.name = "CREATOR";
-            p1.name = "PROCESSOR1";
-            p2.name = "PROCESSOR2";
-            p3.name = "PROCESSOR3";
-
-            c.distribution = "exp";
-            p1.distribution = "exp";
-            p2.distribution = "exp";
-            p3.distribution = "exp";
-
-            List<Element> list = new List<Element>();
-            list.Add(c);
-            list.Add(p1);
-            list.Add(p2);
-            list.Add(p3);
+                c,
+                p1,
+                p2
+            };
             Model model = new Model(list);
             model.Simulate(100.0);
         }

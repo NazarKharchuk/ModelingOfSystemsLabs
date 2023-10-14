@@ -1,6 +1,4 @@
 ﻿using Lab2.Generator;
-using System.Threading.Channels;
-using System.Xml.Linq;
 
 namespace Lab2.SystemElements
 {
@@ -11,7 +9,7 @@ namespace Lab2.SystemElements
         public double delayDev { get; set; } = 10;
         public string distribution { get; set; }
         public int quantity { get; set; }
-        public double tcurr { get; set; }
+        public double tcurr { get; private set; }
         public int state { get; set; }
         public List<(Element, double)> allNextElements { get; set; } = new List<(Element, double)>();
         public Element? nextElement {
@@ -72,6 +70,11 @@ namespace Lab2.SystemElements
             allNextElements.Clear();
         }
 
+        public virtual void SetTcurr(double newTcurr)
+        {
+            tcurr = newTcurr;
+        }
+
         public double GetDelay()
         {
             double delay = distribution switch
@@ -115,7 +118,6 @@ namespace Lab2.SystemElements
 
             double totalProbability = allNextElements.Sum(x => x.Item2);
             double randomValue = new Random().NextDouble() * totalProbability;
-            //Console.WriteLine($"\trandom {randomValue}");
 
             double currentSum = 0;
             foreach (var (element, probability) in allNextElements)
@@ -123,7 +125,7 @@ namespace Lab2.SystemElements
                 currentSum += probability;
                 if (randomValue <= currentSum)
                 {
-                    //Console.WriteLine($"\tchoosen {element?.name}");
+                    //Console.WriteLine($"\tchoosen {element?.name} \trandom {randomValue}");
                     return element;
                 }
             }
