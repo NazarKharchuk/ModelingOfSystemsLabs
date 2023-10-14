@@ -8,28 +8,6 @@
         public double meanQueue { get; private set; }
         public double meanLoad { get; private set; }
         public List<Device> devicesList { get; set; }
-        /*public double tnext
-        {
-            get
-            {
-                double minTnext = double.MaxValue;
-                foreach (Device device in devicesList) { if (device.tnext > minTnext) { minTnext = device.tnext; } }
-                return minTnext;
-            }
-            private set { base.tnext = value; }
-        }*/
-        /*public new double tcurr
-        {
-            get
-            {
-                return base.tcurr;
-            }
-            set
-            {
-                foreach (var device in devicesList) device.tcurr = value;
-                base.tcurr = value;
-            }
-        }*/
         public override void SetTcurr(double newTcurr)
         {
             foreach (var device in devicesList) device.SetTcurr(newTcurr);

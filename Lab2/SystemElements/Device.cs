@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Lab2.SystemElements
+﻿namespace Lab2.SystemElements
 {
     internal class Device: Element
     {
