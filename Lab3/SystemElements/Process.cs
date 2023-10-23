@@ -17,6 +17,10 @@ namespace Lab3.SystemElements
             foreach (var device in devicesList) device.SetTcurr(newTcurr);
             base.SetTcurr(newTcurr);
         }
+        public static int processedCount = 0;
+        public static int failedCount = 0;
+        public double sumTimeLeave = 0.0;
+        public double prevTimeLeave = 0.0;
 
         public Process(string nameOfElement, IDelayGenerator delayGenerator, IQueue<IProcessedObject> queue, List<Device> devices) 
             : base(nameOfElement, delayGenerator)
@@ -45,6 +49,7 @@ namespace Lab3.SystemElements
                 else
                 {
                     failure++;
+                    failedCount++;
                 }
             }
         }
@@ -57,8 +62,11 @@ namespace Lab3.SystemElements
                 if (device.tnext == tnext)
                 {
                     quantity++;
+                    processedCount++;
                     obj = device.OutAct();
                     nextElement?.InAct(obj);
+                    sumTimeLeave += tcurr - prevTimeLeave;
+                    prevTimeLeave = tcurr;
                 }
             }
             tnext = double.MaxValue;

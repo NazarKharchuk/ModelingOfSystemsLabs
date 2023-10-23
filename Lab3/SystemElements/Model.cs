@@ -3,7 +3,7 @@
     internal class Model
     {
         private List<Element> list = new List<Element>();
-        double tnext, tcurr;
+        public double tnext, tcurr;
         int event_;
 
         public Model(List<Element> elements)
@@ -77,7 +77,7 @@
             int created = 0;
             int processed = 0;
 
-            Console.WriteLine("\n-------------RESULTS-------------");
+            Console.WriteLine("\n-------------RESULTS IN ELEMENTS-------------");
             foreach (var element in list)
             {
                 element.PrintResult();
@@ -103,7 +103,7 @@
                 }
             }
 
-            Console.WriteLine("\n---TOTAL RESULTS---");
+            Console.WriteLine("\n-------------AVERAGE RESULTS IN ELEMENTS-------------");
             Console.WriteLine("mean length of queue = " +
                 (meanQueue / tcurr) / processCount +
                 "\nmean load = " +
