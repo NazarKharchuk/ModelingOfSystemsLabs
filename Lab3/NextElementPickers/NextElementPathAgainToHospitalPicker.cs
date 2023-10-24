@@ -3,14 +3,15 @@ using Lab3.SystemElements;
 
 namespace Lab3.NextElementPickers
 {
-    internal class NextElementSinglePicker : INextElementPicker
+    internal class NextElementPathAgainToHospitalPicker : INextElementPicker
     {
         private readonly Process? nextElement;
 
-        public NextElementSinglePicker(Process? _nextElement) { nextElement = _nextElement; }
+        public NextElementPathAgainToHospitalPicker(Process? _nextElement) { nextElement = _nextElement; }
 
         public Process? GetNextElement(IProcessedObject obj)
         {
+            ((PatientObject)obj).type = PatientType.Type1;
             return nextElement;
         }
     }

@@ -11,9 +11,9 @@ namespace Lab3.SystemElements
         public override void InAct(IProcessedObject obj)
         {
             state = 1;
-            tnext = tcurr + delayGenerator.GetDelay();
-            Console.WriteLine($"\nIn act in {name}, time = {tnext}");
             this.obj = obj;
+            tnext = tcurr + GetDelay();
+            Console.WriteLine($"In act in {name}, time = {tnext}");
         }
 
         public override IProcessedObject OutAct()
@@ -22,6 +22,13 @@ namespace Lab3.SystemElements
             tnext = double.MaxValue;
             state = 0;
             return obj;
+        }
+
+        private double GetDelay()
+        {
+            return (delayGenerator.GetType() != typeof(ReceptionDelayGenerator))
+                    ? delayGenerator.GetDelay()
+                    : ((ReceptionDelayGenerator)delayGenerator).GetDelayByType(((PatientObject)obj).type);
         }
     }
 }

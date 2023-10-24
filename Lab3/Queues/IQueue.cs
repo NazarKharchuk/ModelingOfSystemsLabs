@@ -2,12 +2,12 @@
 
 namespace Lab3.Queues
 {
-    internal interface IQueue<T> where T : class, IProcessedObject
+    internal interface IQueue
     {
         public int count { get; }
         public int maxCount { get; }
 
-        public bool EnqueueObject(T _object);
-        public T? DequeueObject();
+        public bool EnqueueObject(IProcessedObject _object);
+        public IProcessedObject? DequeueObject();
     }
 }

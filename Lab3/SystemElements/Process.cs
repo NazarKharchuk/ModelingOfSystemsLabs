@@ -6,7 +6,7 @@ namespace Lab3.SystemElements
 {
     internal class Process : Element
     {
-        public IQueue<IProcessedObject> queue { get; private set; }
+        public IQueue queue { get; private set; }
         public int maxqueue { get; set; }
         public int failure { get; private set; }
         public double meanQueue { get; private set; }
@@ -18,11 +18,12 @@ namespace Lab3.SystemElements
             base.SetTcurr(newTcurr);
         }
         public static int processedCount = 0;
+        public int processedCountThis = 0;
         public static int failedCount = 0;
         public double sumTimeLeave = 0.0;
         public double prevTimeLeave = 0.0;
 
-        public Process(string nameOfElement, IDelayGenerator delayGenerator, IQueue<IProcessedObject> queue, List<Device> devices) 
+        public Process(string nameOfElement, IDelayGenerator delayGenerator, IQueue queue, List<Device> devices) 
             : base(nameOfElement, delayGenerator)
         {
             this.queue = queue;
@@ -63,8 +64,10 @@ namespace Lab3.SystemElements
                 {
                     quantity++;
                     processedCount++;
+                    processedCountThis++;
                     obj = device.OutAct();
-                    nextElement?.InAct(obj);
+                    Process nextEl = getNextElement(obj);
+                    if (nextEl != null) nextEl.InAct(obj); else obj.finish(tcurr);
                     sumTimeLeave += tcurr - prevTimeLeave;
                     prevTimeLeave = tcurr;
                 }

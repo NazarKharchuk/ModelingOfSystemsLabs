@@ -26,7 +26,8 @@ namespace Lab3.SystemElements
             createdCount++;
             tnext = tcurr + delayGenerator.GetDelay();
             IProcessedObject obj = objectGenerator.GenerateObject();
-            nextElement?.InAct(obj);
+            obj.start(tcurr);
+            getNextElement(obj)?.InAct(obj);
             return obj;
         }
     }

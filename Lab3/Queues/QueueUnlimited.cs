@@ -2,32 +2,32 @@
 
 namespace Lab3.Queues
 {
-    internal class QueueUnlimited<T> : IQueue<T> where T : class, IProcessedObject
+    internal class QueueUnlimited : IQueue
     {
-        private List<T> objects;
+        private List<IProcessedObject> objects;
         public int count { get { return objects.Count; } }
         public int maxCount { get; }
 
         public QueueUnlimited()
         {
             this.maxCount = int.MaxValue;
-            objects = new List<T>();
+            objects = new List<IProcessedObject>();
         }
 
-        public T? DequeueObject()
+        public IProcessedObject? DequeueObject()
         {
             if (count == 0)
             {
                 return null;
             }
 
-            T item = objects[0];
+            IProcessedObject item = objects[0];
             objects.RemoveAt(0);
 
             return item;
         }
 
-        public bool EnqueueObject(T _object)
+        public bool EnqueueObject(IProcessedObject _object)
         {
             if (count < maxCount)
             {

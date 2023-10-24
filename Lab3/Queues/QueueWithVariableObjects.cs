@@ -2,9 +2,9 @@
 
 namespace Lab3.Queues
 {
-    internal class QueueWithVariableObjects<T> : IQueue<T> where T : class, IProcessedObject
+    internal class QueueWithVariableObjects : IQueue
     {
-        private List<T> objects;
+        private List<IProcessedObject> objects;
         public int count { get { return objects.Count; } }
         public int maxCount { get; }
         public event Action OnChange;
@@ -14,19 +14,19 @@ namespace Lab3.Queues
         public QueueWithVariableObjects(int maxCount, string queueName)
         {
             this.maxCount = maxCount;
-            objects = new List<T>();
+            objects = new List<IProcessedObject>();
             this.queueName = queueName;
             changesCount = 0;
         }
 
-        public T? DequeueObject()
+        public IProcessedObject? DequeueObject()
         {
             if (count == 0)
             {
                 return null;
             }
 
-            T item = objects[0];
+            IProcessedObject item = objects[0];
             objects.RemoveAt(0);
 
             OnChange?.Invoke();
@@ -34,7 +34,7 @@ namespace Lab3.Queues
             return item;
         }
 
-        public bool EnqueueObject(T _object)
+        public bool EnqueueObject(IProcessedObject _object)
         {
             if (count < maxCount)
             {
@@ -47,17 +47,17 @@ namespace Lab3.Queues
             return false;
         }
 
-        public void Connect(QueueWithVariableObjects<T> otherQueue)
+        public void Connect(QueueWithVariableObjects otherQueue)
         {
             OnChange += () => ChangeObject(otherQueue);
             otherQueue.OnChange += () => ChangeObject(otherQueue);
         }
 
-        public void ChangeObject(QueueWithVariableObjects<T> otherQueue)
+        public void ChangeObject(QueueWithVariableObjects otherQueue)
         {
             if (count - otherQueue.count >= 2)
             {
-                T item = objects.Last();
+                IProcessedObject item = objects.Last();
                 objects.RemoveAt(count - 1);
                 otherQueue.EnqueueObject(item);
                 changesCount++;

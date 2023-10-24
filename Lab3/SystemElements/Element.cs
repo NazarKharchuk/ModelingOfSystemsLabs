@@ -12,12 +12,10 @@ namespace Lab3.SystemElements
         public double tcurr { get; private set; }
         public int state { get; set; }
         public INextElementPicker? nextElementPicker { get; set; } = null;
-        public Process? nextElement {
-            get
-            {
-                if (nextElementPicker != null) return nextElementPicker.GetNextElement();
-                else return null;
-            }
+        public Process? getNextElement(IProcessedObject obj)
+        {
+            if (nextElementPicker != null) return nextElementPicker.GetNextElement(obj);
+            else return null;
         }
 
         public static int nextId { get; private set; } = 0;

@@ -16,8 +16,8 @@ namespace Lab3.Networks
 
             IDelayGenerator p1_delayGenerator = new ExpDelayGenerator(0.3);
             IDelayGenerator p2_delayGenerator = new ExpDelayGenerator(0.3);
-            QueueWithVariableObjects<IProcessedObject> p1_queue = new QueueWithVariableObjects<IProcessedObject>(3, "QUEUE WINDOW 1");
-            QueueWithVariableObjects<IProcessedObject> p2_queue = new QueueWithVariableObjects<IProcessedObject>(3, "QUEUE WINDOW 2");
+            QueueWithVariableObjects p1_queue = new QueueWithVariableObjects(3, "QUEUE WINDOW 1");
+            QueueWithVariableObjects p2_queue = new QueueWithVariableObjects(3, "QUEUE WINDOW 2");
             p1_queue.Connect(p2_queue);
             p2_queue.Connect(p1_queue);
 
@@ -53,13 +53,13 @@ namespace Lab3.Networks
             Console.WriteLine($"\n\t-------------ВИЗНАЧЕНІ ВЕЛИЧИНИ-------------");
             Console.WriteLine($"\tСереднє завантаження касира 1 = {p1.meanLoad / model.tcurr} ");
             Console.WriteLine($"\tСереднє завантаження касира 2 = {p2.meanLoad / model.tcurr} ");
-            Console.WriteLine($"\tСереднє число клієнтів у банку = {(p1.meanQueue + p2.meanQueue) / model.tcurr / 2 + (p1.meanLoad + p2.meanLoad) / model.tcurr / 2} ");
+            Console.WriteLine($"\tСереднє число клієнтів у банку = {(p1.meanQueue + p2.meanQueue) / model.tcurr + (p1.meanLoad + p2.meanLoad) / model.tcurr} ");
             Console.WriteLine($"\tСередній інтервал часу між від'їздами клієнтів від вікон = {(p1.sumTimeLeave + p2.sumTimeLeave) / Process.processedCount} ");
             Console.WriteLine($"\tСередній час перебування клієнта в банку = {((p1.meanQueue + p2.meanQueue) / model.tcurr / 2 + (p1.meanLoad + p2.meanLoad) / model.tcurr / 2) * model.tcurr / Process.processedCount} ");
             Console.WriteLine($"\tСереднє число клієнтів у черзі вікна 1 = {p1.meanQueue / model.tcurr} ");
             Console.WriteLine($"\tСереднє число клієнтів у черзі вікна 2 = {p2.meanQueue / model.tcurr} ");
             Console.WriteLine($"\tВідсоток клієнтів, яким відмовлено в обслуговуванні = {(double)Process.failedCount / Create.createdCount} ");
-            Console.WriteLine($"\tЧисло змін під'їзних смуг = {QueueWithVariableObjects<IProcessedObject>.changesCount} ");
+            Console.WriteLine($"\tЧисло змін під'їзних смуг = {QueueWithVariableObjects.changesCount} ");
         }
     }
 }

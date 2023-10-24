@@ -1,4 +1,5 @@
-﻿using Lab3.SystemElements;
+﻿using Lab3.ProcessedObjects;
+using Lab3.SystemElements;
 
 namespace Lab3.NextElementPickers
 {
@@ -10,7 +11,7 @@ namespace Lab3.NextElementPickers
             allNextElements = nextElements;
         }
 
-        public Process? GetNextElement()
+        public Process? GetNextElement(IProcessedObject obj)
         {
             if (allNextElements.Count == 0)
             {

@@ -8,6 +8,8 @@ namespace Lab3
         {
             var network = new BankNetwork();
             network.RunNetwork(100.0);
+            /*var network = new HospitalNetwork();
+            network.RunNetwork(2000.0);*/
         }
     }
 }

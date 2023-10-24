@@ -2,15 +2,15 @@
 
 namespace Lab3.Queues
 {
-    internal class QueueLimited : IQueue
+    internal class QueueUnlimitedWithPriority : IQueue
     {
         private List<IProcessedObject> objects;
         public int count { get { return objects.Count; } }
         public int maxCount { get; }
 
-        public QueueLimited(int maxCount)
+        public QueueUnlimitedWithPriority()
         {
-            this.maxCount = maxCount;
+            this.maxCount = int.MaxValue;
             objects = new List<IProcessedObject>();
         }
 
@@ -22,14 +22,23 @@ namespace Lab3.Queues
             }
 
             IProcessedObject item = objects[0];
-            objects.RemoveAt(0);
+
+            foreach (var obj in objects) {
+                if (((PatientObject)obj).type == PatientType.Type1)
+                {
+                    item = obj;
+                    break;
+                }
+            }
+
+            objects.Remove(item);
 
             return item;
         }
 
         public bool EnqueueObject(IProcessedObject _object)
         {
-            if(count < maxCount)
+            if (count < maxCount)
             {
                 objects.Add(_object);
                 return true;

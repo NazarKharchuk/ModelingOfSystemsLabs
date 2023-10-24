@@ -102,16 +102,6 @@
                     created += element.quantity;
                 }
             }
-
-            Console.WriteLine("\n-------------AVERAGE RESULTS IN ELEMENTS-------------");
-            Console.WriteLine("mean length of queue = " +
-                (meanQueue / tcurr) / processCount +
-                "\nmean load = " +
-                (meanLoad / tcurr) / processCount +
-                "\nfailure probability = " +
-                failureProbability / (double)processed);
-            Console.WriteLine("start-end probability = " +
-                (double)processed / (double)created);
         }
     }
 }
