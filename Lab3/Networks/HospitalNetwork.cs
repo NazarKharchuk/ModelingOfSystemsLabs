@@ -82,13 +82,10 @@ namespace Lab3.Networks
             model.Simulate(time);
 
             Console.WriteLine($"\n\t-------------ВИЗНАЧЕНІ ВЕЛИЧИНИ-------------");
-            Console.WriteLine($"\tЧас, проведений хворим у системі (типи 1 та 2) = {PatientObject.types12Sum / PatientObject.types12Count} ");
+            Console.WriteLine($"\tЧас, проведений хворим у системі (тип 1) = {PatientObject.type1Sum / PatientObject.type1Count} ");
+            Console.WriteLine($"\tЧас, проведений хворим у системі (тип 2) = {PatientObject.type2Sum / PatientObject.type2Count} ");
             Console.WriteLine($"\tЧас, проведений хворим у системі (тип 3) = {PatientObject.type3Sum / PatientObject.type3Count} ");
             Console.WriteLine($"\tІнтервал між прибуттями хворих у лабораторію = {labRegistry.sumTimeLeave / labRegistry.processedCountThis} ");
-            /*Console.WriteLine($"\tSum (типи 1 та 2) = {PatientObject.types12Sum} ");
-            Console.WriteLine($"\tCount (типи 1 та 2) = {PatientObject.types12Count} ");
-            Console.WriteLine($"\tSum (тип 3) = {PatientObject.type3Sum} ");
-            Console.WriteLine($"\tCount (тип 3) = {PatientObject.type3Count} ");*/
         }
     }
 }

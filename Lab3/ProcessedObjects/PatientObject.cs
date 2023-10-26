@@ -5,11 +5,14 @@ namespace Lab3.ProcessedObjects
     internal class PatientObject: IProcessedObject
     {
         public PatientType type;
+        public PatientType initType;
 
-        public static double types12Sum;
+        public static double type1Sum;
+        public static double type2Sum;
         public static double type3Sum;
 
-        public static int types12Count;
+        public static int type1Count;
+        public static int type2Count;
         public static int type3Count;
 
         public double startTime;
@@ -17,6 +20,7 @@ namespace Lab3.ProcessedObjects
         public PatientObject(PatientType _type)
         {
             type = _type;
+            initType = _type;
         }
 
         public void start(double startTime)
@@ -27,14 +31,19 @@ namespace Lab3.ProcessedObjects
         public void finish(double finishTime)
         {
             double lifeTime = finishTime - startTime;
-            switch ((int)type)
+            switch ((int)initType)
             {
+                case (1):
+                    type1Sum += lifeTime;
+                    type1Count++;
+                    break;
+                case (2):
+                    type2Sum += lifeTime;
+                    type2Count++;
+                    break;
                 case (3):
                     type3Sum += lifeTime;
                     type3Count++;
-                    break;
-                default: types12Sum += lifeTime;
-                    types12Count++;
                     break;
             }
         }

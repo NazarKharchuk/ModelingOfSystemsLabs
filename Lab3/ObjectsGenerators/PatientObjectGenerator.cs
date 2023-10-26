@@ -7,7 +7,7 @@ namespace Lab3.ObjectsGenerators
         private readonly List<(PatientType type, double chance)> allTypes = new List<(PatientType type, double chance)>
         {
             (PatientType.Type1, 0.5),
-            (PatientType.Type2, 0.91),
+            (PatientType.Type2, 0.1),
             (PatientType.Type3, 0.4)
         };
 
