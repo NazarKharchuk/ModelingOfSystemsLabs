@@ -1,5 +1,4 @@
-﻿using System.Net.Security;
-using TransportDepartment.DelayGenerators;
+﻿using TransportDepartment.DelayGenerators;
 using TransportDepartment.NextElementPickers;
 using TransportDepartment.ObjectsGenerators;
 using TransportDepartment.ProcessedObjects;
@@ -110,41 +109,6 @@ namespace TransportDepartment.Networks
 
             fromCToAWithoutLoad.nextElementPicker = new NextElementByConditionPicker(AQueue, loadA, fromAToBWithoutLoad);
 
-            // Adding trucks
-            if(isUniformDistributionOfTrucks)
-            {
-                loadA.SetTcurr(0.0);
-                loadA.InAct(new ProcessedObject());
-
-                fromAToBWithLoad.SetTcurr(0.0);
-                fromAToBWithLoad.InAct(new ProcessedObject());
-
-                unloadB.SetTcurr(0.0);
-                unloadB.InAct(new ProcessedObject());
-
-                fromAToBWithoutLoad.SetTcurr(0.0);
-                fromAToBWithoutLoad.InAct(new ProcessedObject());
-
-                loadB.SetTcurr(0.0);
-                loadB.InAct(new ProcessedObject());
-
-                fromBToCWithLoad.SetTcurr(0.0);
-                fromBToCWithLoad.InAct(new ProcessedObject());
-
-                unloadC.SetTcurr(0.0);
-                unloadC.InAct(new ProcessedObject());
-
-                fromBToCWithoutLoad.SetTcurr(0.0);
-                fromBToCWithoutLoad.InAct(new ProcessedObject());
-            }
-            else
-            {
-                loadA.SetTcurr(0.0);
-                loadA.InAct(new ProcessedObject());
-                fromAToBWithoutLoad.SetTcurr(0.0);
-                for (int i = 0; i < 7; i++) { fromAToBWithoutLoad.InAct(new ProcessedObject()); }
-            }
-
             List<Element> elements = new()
             {
                 ACreator,
@@ -163,13 +127,83 @@ namespace TransportDepartment.Networks
             };
 
             Model model = new Model(elements);
-            model.Simulate(time);
 
-            Console.WriteLine($"\n\t-------------ВИЗНАЧЕНІ ВЕЛИЧИНИ-------------");
-            Console.WriteLine($"\tЧастота порожніх перегонів вантажівок з A в B: " +
-                $"{(double)fromAToBWithoutLoad.quantity / (fromAToBWithLoad.quantity + fromAToBWithoutLoad.quantity)} ");
-            Console.WriteLine($"\tЧастота порожніх перегонів вантажівок з B в C: " +
-                $"{(double)fromBToCWithoutLoad.quantity / (fromBToCWithLoad.quantity + fromBToCWithoutLoad.quantity)} ");
+            int fromAToBWithLoadSum = 0;
+            int fromAToBWithoutLoadSum = 0;
+            int fromBToCWithLoadSum = 0;
+            int fromBToCWithoutLoadSum = 0;
+
+            const int repeatCount = 5;
+
+            Console.WriteLine($"Час моделювання: " + time);
+            for (int n = 1; n <= repeatCount; n++)
+            {
+                model.ClearModel();
+
+                // Adding trucks
+                if (isUniformDistributionOfTrucks)
+                {
+                    loadA.SetTcurr(0.0);
+                    loadA.InAct(new ProcessedObject());
+
+                    fromAToBWithLoad.SetTcurr(0.0);
+                    fromAToBWithLoad.InAct(new ProcessedObject());
+
+                    unloadB.SetTcurr(0.0);
+                    unloadB.InAct(new ProcessedObject());
+
+                    fromAToBWithoutLoad.SetTcurr(0.0);
+                    fromAToBWithoutLoad.InAct(new ProcessedObject());
+
+                    loadB.SetTcurr(0.0);
+                    loadB.InAct(new ProcessedObject());
+
+                    fromBToCWithLoad.SetTcurr(0.0);
+                    fromBToCWithLoad.InAct(new ProcessedObject());
+
+                    unloadC.SetTcurr(0.0);
+                    unloadC.InAct(new ProcessedObject());
+
+                    fromBToCWithoutLoad.SetTcurr(0.0);
+                    fromBToCWithoutLoad.InAct(new ProcessedObject());
+                }
+                else
+                {
+                    loadA.SetTcurr(0.0);
+                    loadA.InAct(new ProcessedObject());
+                    fromAToBWithoutLoad.SetTcurr(0.0);
+                    for (int i = 0; i < 7; i++) { fromAToBWithoutLoad.InAct(new ProcessedObject()); }
+                }
+
+                model.Simulate(time);
+
+                Console.WriteLine($"\n\t-------------ВИЗНАЧЕНІ ВЕЛИЧИНИ {n}-------------");
+                Console.WriteLine($"Кількість перегонів вантажівок з A в B: " + fromAToBWithLoad.quantity);
+                Console.WriteLine($"Кількість порожніх перегонів вантажівок з A в B: " + fromAToBWithoutLoad.quantity);
+                Console.WriteLine($"\tЧастота порожніх перегонів вантажівок з A в B: " +
+                    $"{(double)fromAToBWithoutLoad.quantity / (fromAToBWithLoad.quantity + fromAToBWithoutLoad.quantity)} ");
+
+                Console.WriteLine($"\nКількість перегонів вантажівок з B в C: " + fromBToCWithLoad.quantity);
+                Console.WriteLine($"Кількість порожніх перегонів вантажівок з B в C: " + fromBToCWithoutLoad.quantity);
+                Console.WriteLine($"\tЧастота порожніх перегонів вантажівок з B в C: " +
+                    $"{(double)fromBToCWithoutLoad.quantity / (fromBToCWithLoad.quantity + fromBToCWithoutLoad.quantity)} ");
+
+                fromAToBWithLoadSum += fromAToBWithLoad.quantity;
+                fromAToBWithoutLoadSum += fromAToBWithoutLoad.quantity;
+                fromBToCWithLoadSum += fromBToCWithLoad.quantity;
+                fromBToCWithoutLoadSum += fromBToCWithoutLoad.quantity;
+            }
+
+            Console.WriteLine($"\n\t-------------СЕРЕДНІ ВИЗНАЧЕНІ ВЕЛИЧИНИ-------------");
+            Console.WriteLine($"Середня кількість перегонів вантажівок з A в B: " + (double)fromAToBWithLoadSum / repeatCount);
+            Console.WriteLine($"Середня кількість порожніх перегонів вантажівок з A в B: " + (double)fromAToBWithoutLoadSum / repeatCount);
+            Console.WriteLine($"\tСередня частота порожніх перегонів вантажівок з A в B: " +
+                $"{(double)fromAToBWithoutLoadSum / repeatCount / ((double)fromAToBWithLoadSum / repeatCount + (double)fromAToBWithoutLoadSum / repeatCount)} ");
+
+            Console.WriteLine($"\nСередня кількість перегонів вантажівок з B в C: " + (double)fromBToCWithLoadSum / repeatCount);
+            Console.WriteLine($"Середня кількість порожніх перегонів вантажівок з B в C: " + (double)fromBToCWithoutLoadSum / repeatCount);
+            Console.WriteLine($"\tСередня частота порожніх перегонів вантажівок з B в C: " +
+                $"{(double)fromBToCWithoutLoadSum / repeatCount / ((double)fromBToCWithLoadSum / repeatCount + (double)fromBToCWithoutLoadSum / repeatCount)} ");
         }
     }
 }

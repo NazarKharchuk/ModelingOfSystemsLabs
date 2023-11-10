@@ -13,7 +13,7 @@ namespace TransportDepartment.SystemElements
             state = 1;
             this.obj = obj;
             tnext = tcurr + GetDelay();
-            Console.WriteLine($"In act in {name}, time = {tnext}");
+            //Console.WriteLine($"In act in {name}, time = {tnext}");
         }
 
         public override IProcessedObject OutAct()
@@ -27,6 +27,13 @@ namespace TransportDepartment.SystemElements
         private double GetDelay()
         {
             return delayGenerator.GetDelay();
+        }
+
+        public override void ClearElement()
+        {
+            quantity = 0;
+            tnext = double.MaxValue;
+            state = 0;
         }
     }
 }

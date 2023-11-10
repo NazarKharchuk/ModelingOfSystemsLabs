@@ -36,5 +36,10 @@ namespace TransportDepartment.Queues
             }
             return false;
         }
+
+        public void ClearQueue()
+        {
+            objects.Clear();
+        }
     }
 }

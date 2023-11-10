@@ -7,7 +7,6 @@ namespace TransportDepartment.SystemElements
     internal class Create : Element
     {
         private readonly IObjectGenerator objectGenerator;
-        public static int createdCount = 0;
 
         public Create(string nameOfElement, IDelayGenerator delayGenerator, IObjectGenerator _objectGenerator) : base(nameOfElement, delayGenerator)
         {
@@ -23,12 +22,17 @@ namespace TransportDepartment.SystemElements
         public override IProcessedObject OutAct()
         {
             quantity++;
-            createdCount++;
             tnext = tcurr + delayGenerator.GetDelay();
             IProcessedObject obj = objectGenerator.GenerateObject();
-            obj.start(tcurr);
             getNextElement(obj)?.InAct(obj);
             return obj;
+        }
+
+        public override void ClearElement()
+        {
+            quantity = 0;
+            tnext = 0.0;
+            state = 0;
         }
     }
 }

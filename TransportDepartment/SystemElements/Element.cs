@@ -18,8 +18,6 @@ namespace TransportDepartment.SystemElements
             else return null;
         }
 
-        public static int nextId { get; private set; } = 0;
-        public int id { get; set; }
         public string name { get; set; }
 
         public Element(string nameOfElement, IDelayGenerator delayGenerator)
@@ -28,8 +26,6 @@ namespace TransportDepartment.SystemElements
             tnext = double.MaxValue;
             tcurr = tnext;
             state = 0;
-            id = nextId;
-            nextId++;
             this.delayGenerator = delayGenerator;
         }
 
@@ -53,6 +49,10 @@ namespace TransportDepartment.SystemElements
         }
 
         public virtual void DoStatistics(double delta)
+        {
+        }
+
+        public virtual void ClearElement()
         {
         }
     }

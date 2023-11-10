@@ -7,28 +7,17 @@ namespace TransportDepartment.SystemElements
     internal class Process : Element
     {
         public IQueue queue { get; private set; }
-        public int maxqueue { get; set; }
-        public int failure { get; private set; }
-        public double meanQueue { get; private set; }
-        public double meanLoad { get; private set; }
         public List<Device> devicesList { get; set; }
         public override void SetTcurr(double newTcurr)
         {
             foreach (var device in devicesList) device.SetTcurr(newTcurr);
             base.SetTcurr(newTcurr);
         }
-        public static int processedCount = 0;
-        public int processedCountThis = 0;
-        public static int failedCount = 0;
-        public double sumTimeLeave = 0.0;
-        public double prevTimeLeave = 0.0;
 
         public Process(string nameOfElement, IDelayGenerator delayGenerator, IQueue queue, List<Device> devices) 
             : base(nameOfElement, delayGenerator)
         {
             this.queue = queue;
-            meanQueue = 0.0;
-            meanLoad = 0.0;
             devicesList = devices;
         }
 
@@ -43,15 +32,7 @@ namespace TransportDepartment.SystemElements
             }
             else
             {
-                if (queue.count < queue.maxCount)
-                {
-                    queue.EnqueueObject(obj);
-                }
-                else
-                {
-                    failure++;
-                    failedCount++;
-                }
+                queue.EnqueueObject(obj);
             }
         }
 
@@ -63,18 +44,14 @@ namespace TransportDepartment.SystemElements
                 if (device.tnext == tnext)
                 {
                     quantity++;
-                    processedCount++;
-                    processedCountThis++;
+                    state--;
                     obj = device.OutAct();
                     Element? nextEl = getNextElement(obj);
-                    if (nextEl != null) nextEl.InAct(obj); else obj.finish(tcurr);
-                    sumTimeLeave += tcurr - prevTimeLeave;
-                    prevTimeLeave = tcurr;
+                    nextEl?.InAct(obj);
                 }
             }
             tnext = double.MaxValue;
             foreach (Device device in devicesList) { if (device.tnext < tnext) { tnext = device.tnext; } }
-            state--;
             Device? freeDevice = findFreeDevice();
             while (queue.count > 0 && freeDevice != null)
             {
@@ -89,13 +66,7 @@ namespace TransportDepartment.SystemElements
         public override void PrintInfo()
         {
             base.PrintInfo();
-            Console.WriteLine("failure = " + failure + "\nqueue = " + queue.count);
-        }
-
-        public override void DoStatistics(double delta)
-        {
-            meanQueue += queue.count * delta;
-            meanLoad += (state > 0 ? 1 : 0) * delta;
+            Console.WriteLine("queue = " + queue.count);
         }
 
         private Device? findFreeDevice()
@@ -107,13 +78,13 @@ namespace TransportDepartment.SystemElements
             return null;
         }
 
-        private bool findBusyDevice()
+        public override void ClearElement()
         {
-            foreach (Device device in devicesList)
-            {
-                if (device.state == 1) return true;
-            }
-            return false;
+            quantity = 0;
+            tnext = double.MaxValue;
+            state = 0;
+            queue.ClearQueue();
+            foreach (Device device in devicesList) device.ClearElement();
         }
     }
 }

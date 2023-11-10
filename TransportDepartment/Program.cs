@@ -7,7 +7,7 @@ namespace TransportDepartment
         static void Main(string[] args)
         {
             var network = new TransportDepartmentNetwork();
-            network.RunNetwork(100.0, true);
+            network.RunNetwork(1000000.0, false);
         }
     }
 }

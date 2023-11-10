@@ -20,14 +20,14 @@ namespace TransportDepartment.NextElementPickers
         {
             if(queue.count > 0)
             {
-                Console.WriteLine($"\tNext element {nextElementWithLoad.name}. Queue: {queue.count}");
+                //Console.WriteLine($"\tNext element {nextElementWithLoad.name}. Queue: {queue.count}");
                 queue.DequeueObject();
-                Console.WriteLine($"\tQueue: {queue.count}");
+                //Console.WriteLine($"\tQueue: {queue.count}");
                 return nextElementWithLoad;
             }
             else
             {
-                Console.WriteLine($"\tNext element {nextElementWithoutLoad.name}.");
+                //Console.WriteLine($"\tNext element {nextElementWithoutLoad.name}.");
                 return nextElementWithoutLoad;
             }
         }

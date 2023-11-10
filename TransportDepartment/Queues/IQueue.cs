@@ -9,5 +9,6 @@ namespace TransportDepartment.Queues
 
         public bool EnqueueObject(IProcessedObject _object);
         public IProcessedObject? DequeueObject();
+        public void ClearQueue();
     }
 }

@@ -28,14 +28,7 @@
                     }
                 }
 
-                Console.WriteLine("\nIt's time for event in " +
-                    list[event_].name +
-                    ", time = " + tnext);
-
-                foreach (var element in list)
-                {
-                    element.DoStatistics(tnext - tcurr);
-                }
+                //Console.WriteLine("\nIt's time for event in " + list[event_].name + ", time = " + tnext);
 
                 tcurr = tnext;
 
@@ -54,10 +47,8 @@
                     }
                 }
 
-                PrintInfo();
+                //PrintInfo();
             }
-
-            PrintResult();
         }
 
         public void PrintInfo()
@@ -68,40 +59,15 @@
             }
         }
 
-        public void PrintResult()
+        public void ClearModel()
         {
-            double meanQueue = 0.0;
-            double meanLoad = 0.0;
-            double failureProbability = 0.0;
-            int processCount = 0;
-            int created = 0;
-            int processed = 0;
-
-            Console.WriteLine("\n-------------RESULTS IN ELEMENTS-------------");
             foreach (var element in list)
             {
-                element.PrintResult();
-                if (element is Process)
-                {
-                    Process p = (Process)element;
-                    Console.WriteLine("mean length of queue = " +
-                        p.meanQueue / tcurr +
-                        "\nmean load of process = " +
-                        p.meanLoad / tcurr +
-                        "\nfailure probability = " +
-                        p.failure / (double)p.quantity);
-
-                    processCount++;
-                    processed = p.quantity;
-                    meanQueue += p.meanQueue;
-                    meanLoad += p.meanLoad;
-                    failureProbability += p.failure;
-                }
-                if (element is Create)
-                {
-                    created += element.quantity;
-                }
+                element.ClearElement();
             }
+            tnext = 0.0;
+            event_ = 0;
+            tcurr = tnext;
         }
     }
 }

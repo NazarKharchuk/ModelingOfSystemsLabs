@@ -1,7 +1,4 @@
-﻿using TransportDepartment.DelayGenerators;
-using TransportDepartment.SystemElements;
-
-namespace TransportDepartment.Networks
+﻿namespace TransportDepartment.Networks
 {
     internal interface INetwork
     {
